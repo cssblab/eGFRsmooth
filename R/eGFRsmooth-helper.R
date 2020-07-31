@@ -31,6 +31,8 @@ trimValues <- function(x, y, thres.acute) {
 }
 
 # Plotting function - smooth single trajectory
+#' @importFrom graphics axis points abline par title 
+#' @importFrom stats dnorm
 plotSmooth = function(x, y, rx, ry, eGFR.range,
                       k.width, w.width, min.width, max.range, name = NULL) {
     ## Initialize variables

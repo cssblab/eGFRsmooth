@@ -42,9 +42,11 @@ eGFRsmooth <- function(data, k.width, w.width = 2, min.width = 1,
                   output.dir = output.dir)
 }
 
-#' @importFrom dplyr as_tibble '%>%' filter arrange group_by summarise mutate
+#' @importFrom dplyr as_tibble '%>%' filter arrange group_by summarise mutate nth
 #' @importFrom tidyr unnest pivot_wider
 #' @importFrom rlang .data
+#' @importFrom grDevices dev.off pdf
+#' @importFrom  utils write.table
 drawPlots = function(data, k.width, w.width, min.width, 
                      thres.acute, max.range, 
                      table = TRUE, sorted = FALSE, output.dir) {
@@ -85,7 +87,7 @@ drawPlots = function(data, k.width, w.width, min.width,
                              max.range = max.range,
                              name = unique(.data$Subject)),
                     .groups='drop') %>%
-    tidyr::unnest(., res) %>%
+    tidyr::unnest(.data, .data$res) %>%
     dplyr::mutate(ID=rep(c('Slope', 
                     'Percentage.Drop', 
                     'eGFR.Window.Start',
@@ -95,7 +97,7 @@ drawPlots = function(data, k.width, w.width, min.width,
                     'Time.Range.Followup',
                     'Num.Pts',
                     'Lead.Time'), length(unique(.data$Subject)))) %>%
-    tidyr::pivot_wider(., names_from = ID, values_from = res)
+    tidyr::pivot_wider(.data, names_from = .data$ID, values_from = .data$res)
   dev.off()
   if (table) {
     print('Generating results table...')
@@ -117,7 +119,7 @@ drawPlotsSorted = function(data, result, k.width, w.width, min.width,
   
   result <- result %>% 
     dplyr::filter(!is.na(.data$Slope)) %>%
-    dplyr::arrange(., .[[sort.id]])
+    dplyr::arrange(.data, .data[[sort.id]])
     
   subject.order <- as.factor(result$Subject)
   if (decreasing) {
