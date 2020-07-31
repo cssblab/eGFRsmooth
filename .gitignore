@@ -1,7 +1,13 @@
+## Project files
 .Rproj
 .Rproj.user
+eGFRsmooth.Rproj
+
+## History files
 .Rhistory
+
+##  Data files
 .RData
 .Ruserdata
+
 inst/doc
-eGFRsmooth.Rproj
