@@ -24,7 +24,7 @@
 #' @export
 #' @return A data.frame. Summarizes the slope, percentage change and other 
 #'  statistics for each trajectory. Outputs a plot (pdf) and table (txt) to 
-#'  present working directory 
+#'  user defined working directory or the present working directory
 #'  
 eGFRsmooth <- function(data, k.width, w.width = 2, min.width = 1, 
                        thres.acute = 30, max.range = NA, output.dir = NULL,
