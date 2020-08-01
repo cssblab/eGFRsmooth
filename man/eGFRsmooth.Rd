@@ -7,14 +7,14 @@ summarizing slope and percentage change for each trajectory}
 \usage{
 eGFRsmooth(
   data,
-  k.width,
+  k.width = 150,
   w.width = 2,
   min.width = 1,
   thres.acute = 30,
   max.range = NA,
-  output.dir = NULL,
   sort.param = "Percentage.Drop",
-  decreasing = FALSE
+  decreasing = FALSE,
+  output.dir = NULL
 )
 }
 \arguments{
@@ -36,20 +36,21 @@ usually characterized by large variance. Defaults to 30 days}
 \item{max.range}{A numeric value. The maximum range (in years) from the
 baseline date to be analyzed. Defaults to NA (unrestricted range)}
 
-\item{output.dir}{A character value. Output directory for plots and 
-summary table. Defaults to NULL}
-
 \item{sort.param}{A character vector. Controls output plot name. One of 
 Slope, Percentage.Drop, eGFR.Window.Start, eGFR.Window.End, 
-eGFR.Baseline, Num.Observations, Time.Range.Followup, Num.Pts, Lead.Time.
+eGFR.Baseline, Observations.Total, Observations.Used, Time.Range, 
+Time.Window.Start, Time.Window.End.
 Defaults to Percentage.Drop}
 
 \item{decreasing}{A boolean value. Controls sorting}
+
+\item{output.dir}{A character value. Output directory for plots and 
+summary table. Defaults to NULL}
 }
 \value{
 A data.frame. Summarizes the slope, percentage change and other 
  statistics for each trajectory. Outputs a plot (pdf) and table (txt) to 
- present working directory
+ user defined working directory or the present working directory
 }
 \description{
 Smooths eGFR trajectories and outputs plots for each subject, and a table
