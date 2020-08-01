@@ -156,7 +156,7 @@ are described in depth below:
 `eGFRsmooth` also outputs two pdf documents corresponding to sorted and
 unsorted plots of the trajectories for each subject. 9 plots are drawn
 on each page in a 3x3 grid. Below are the plots from `unsorted.pdf`
-returned from the run with the example data set.
+returned from the run with the example data set with six subjects.
 
 <img src="man/figures/unsorted.max.range.png" width="100%" style="display: block; margin: auto;" />
 
@@ -196,13 +196,12 @@ fine-tune smoothing and describe how the output varies with each change.
 
 **k.width**
 
-`k.width` is the smoothing bandwidth parameters, and controls how
-smoothed out each continuous trajectory is. By default, `k.width` is set
-to 150 days. Larger values of `k.width` mean that the trajectories are
-more smoothed out. The plot on the right shows the output with `k.width
-= 75`, and shows a trajectory that is perhaps over-fitted to the data
-points. Users can fine-tune smoothing with `k.width` based on the data
-set.
+`k.width` (the smoothing bandwidth) controls how smoothed out each
+continuous trajectory is. By default, `k.width` is set to 150 days.
+Larger values of `k.width` mean that the trajectories are more smoothed
+out. The plot on the right shows the output with `k.width = 75`, and
+shows a trajectory that is perhaps over-fitted to the data points. Users
+can fine-tune smoothing with `k.width` based on the data set.
 
 <img src="man/figures/arg.k.width.jpg" width="100%" style="display: block; margin: auto;" />
 
