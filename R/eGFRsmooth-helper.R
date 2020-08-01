@@ -40,9 +40,10 @@ plotSmooth = function(x, y, rx, ry, eGFR.range,
     perc.drop = NA
     s.egfr = NA
     e.egfr = NA
+    s.time = NA
+    e.time = NA
     numpts = NA
-    lead = NA
-    
+
     ## Read input, plot the points
     id = which(!is.na(x) & !is.na(y))
     x = x[id]  ## Time point of non-missing eGFR measurements
@@ -114,14 +115,15 @@ plotSmooth = function(x, y, rx, ry, eGFR.range,
             ## Highlight in red the range with the steepest avg slope
             points(xx[start:(start+w)], yest[start:(start+w)], type = "l", col = 2, lwd = 1.5)
             if (!is.na(max.range)) {
-                abline(v = max.range, lwd = 0.5, col = 4, lty = 3)
+                abline(v = max.range, lwd = 1.5, col = 4, lty = 3)
             }
             
             ## Record the starting eGFR and ending eGFR of the window used
             s.egfr = yest[start]
             e.egfr = yest[start+w]
+            s.time = xx[start]
+            e.time = xx[start+w]
             numpts = sum(x >= xx[start] & x <= xx[start+w])
-            lead = xx[start] - x[1]
             ## Calculate the % drop
             perc.drop = (e.egfr - s.egfr) / s.egfr * 100
             ## Add info to plot
@@ -135,8 +137,9 @@ plotSmooth = function(x, y, rx, ry, eGFR.range,
             min = avgSlope(yest, length(xx)-1)
             s.egfr = yest[1]
             e.egfr = yest[length(yest)]
+            s.time = xx[1]
+            e.time = xx[length(xx)]
             numpts = length(x)
-            lead = 0
             ## Calculate the % drop
             perc.drop = (e.egfr - s.egfr) / s.egfr * 100
             ## Add info to plot
@@ -149,16 +152,16 @@ plotSmooth = function(x, y, rx, ry, eGFR.range,
             title(main = name)
         }
     }
-    ## Less than 4 points and range less than a year - not smoothed
+    ## Less than 4 points OR range less than a year - not smoothed
     else {
         title(main = name)
     }
     
     ## Return the slope, percentage change, starting  and ending egfr in the window - NA if not calculated
     ## And the baseline eGFR readings, number of observations, and the time period of the follow up
-    list(Slope = min, Percentage.Drop = perc.drop,
+    list(Slope = min, Percentage.Drop = perc.drop, eGFR.Baseline = y[1],
          eGFR.Window.Start = s.egfr, eGFR.Window.End = e.egfr,
-         eGFR.Baseline = y[1], Num.Observations = length(x), 
-         Time.Range.Followup = diff(range(x)),
-         Num.Pts = numpts, Lead.Time = lead)
+         Num.Observations = length(x), Num.Pts = numpts,
+         Time.Range.Followup = diff(range(x)), 
+         Time.Window.Start = s.time, Time.Window.End = e.time)
 }

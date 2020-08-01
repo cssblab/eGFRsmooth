@@ -15,7 +15,8 @@
 #'   baseline date to be analyzed. Defaults to NA (unrestricted range)
 #' @param sort.param A character vector. Controls output plot name. One of 
 #'   Slope, Percentage.Drop, eGFR.Window.Start, eGFR.Window.End, 
-#'   eGFR.Baseline, Num.Observations, Time.Range.Followup, Num.Pts, Lead.Time.
+#'   eGFR.Baseline, Observations.Total, Observations.Used, Time.Range, 
+#'   Time.Window.Start, Time.Window.End.
 #'   Defaults to Percentage.Drop
 #' @param decreasing A boolean value. Controls sorting
 #' @param output.dir A character value. Output directory for plots and 
@@ -26,9 +27,10 @@
 #'  statistics for each trajectory. Outputs a plot (pdf) and table (txt) to 
 #'  user defined working directory or the present working directory
 #'  
-eGFRsmooth <- function(data, k.width, w.width = 2, min.width = 1, 
-                       thres.acute = 30, max.range = NA, output.dir = NULL,
-                       sort.param = 'Percentage.Drop', decreasing = FALSE) {
+eGFRsmooth <- function(data, k.width = 150, w.width = 2, min.width = 1, 
+                       thres.acute = 30, max.range = NA, sort.param = 'Percentage.Drop',
+                       decreasing = FALSE, output.dir = NULL) {
+  data <- convertDate(data)
   print('Generating unsorted eGFR statistics and plots...')
   result <- drawPlots(data = data,
                       k.width = k.width, w.width = w.width, min.width = min.width,
@@ -40,6 +42,7 @@ eGFRsmooth <- function(data, k.width, w.width = 2, min.width = 1,
                   thres.acute = thres.acute, max.range = max.range,
                   sort.param = sort.param, decreasing = decreasing,
                   output.dir = output.dir)
+  return(result)
 }
 
 #' @importFrom dplyr as_tibble '%>%' filter arrange group_by summarise mutate nth
@@ -80,24 +83,25 @@ drawPlots = function(data, k.width, w.width, min.width,
                              y = unlist(nth(args, 2)),
                              rx = unlist(nth(args, 3)),
                              ry = unlist(nth(args, 4)),
-                             eGFR.range = range(data$eGFR),
+                             eGFR.range = c(0, max(data$eGFR)*1.2),
                              k.width = k.width,
                              w.width = w.width,
                              min.width = min.width,
                              max.range = max.range,
                              name = unique(.data$Subject)),
                     .groups='drop') %>%
-    tidyr::unnest(.data, .data$res) %>%
+    tidyr::unnest(.data$res) %>%
     dplyr::mutate(ID=rep(c('Slope', 
                     'Percentage.Drop', 
+                    'eGFR.Baseline',
                     'eGFR.Window.Start',
                     'eGFR.Window.End',
-                    'eGFR.Baseline',
-                    'Num.Observations',
-                    'Time.Range.Followup',
-                    'Num.Pts',
-                    'Lead.Time'), length(unique(.data$Subject)))) %>%
-    tidyr::pivot_wider(.data, names_from = .data$ID, values_from = .data$res)
+                    'Observations.Total',
+                    'Observations.Used',
+                    'Time.Range',
+                    'Time.Window.Start',
+                    'Time.Window.End'), length(unique(.data$Subject)))) %>%
+    tidyr::pivot_wider(names_from = .data$ID, values_from = .data$res)
   dev.off()
   if (table) {
     print('Generating results table...')
@@ -119,7 +123,7 @@ drawPlotsSorted = function(data, result, k.width, w.width, min.width,
   
   result <- result %>% 
     dplyr::filter(!is.na(.data$Slope)) %>%
-    dplyr::arrange(.data, .data[[sort.id]])
+    dplyr::arrange(.[[sort.id]])
     
   subject.order <- as.factor(result$Subject)
   if (decreasing) {
@@ -127,10 +131,20 @@ drawPlotsSorted = function(data, result, k.width, w.width, min.width,
   }
   
   ## Sort data
-  data[,1] = factor(data[,1], levels = subject.order)
-  data = data[order(data[,1]),]
+  data[,1] <- factor(data[,1], levels = subject.order)
+  data <- data[!is.na(data[,1]),]
+  data <- data[order(data[,1]),]
 
   ## Call drawPlots, sorted = T for pdf name
   drawPlots(data, k.width, w.width, min.width, thres.acute, max.range, 
             table = FALSE, sorted = TRUE, output.dir)
+}
+
+# Converts dd/mm/yyyy format to numeric days
+convertDate = function(data) {
+  if (is.character(data$Date[1])) {
+    date <- floor(as.numeric(as.POSIXct(data$Date, format = "%d/%m/%Y")) / 86400)
+    data$Date <- as.numeric(date)
+  }
+  return(data)
 }
