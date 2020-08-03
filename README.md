@@ -3,11 +3,12 @@
 
 ## eGFRsmooth : Smoothing eGFR trajectories
 
-eGFRsmooth is an R package designed to smooth estimated Glomerular
-Filtration Rate (eGFR) trajectories. Data points are smoothed with a
-Gaussian kernel and the slope and percentage change of eGFR for each
-subject are calculated. eGFRsmooth returns a table summarizing eGFR
-statistics and outputs plots of smooth trajectories for each subject.
+eGFRsmooth is an R package designed to smooth time-series estimated
+Glomerular Filtration Rate (eGFR) data and generate trajectories. Data
+points are smoothed with a Gaussian kernel and the slope and percentage
+change of eGFR for each subject based on smoothed trajectories are
+calculated. eGFRsmooth returns a table summarizing eGFR statistics and
+outputs plots of smooth trajectories for each subject.
 
 ## Contents
 
