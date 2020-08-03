@@ -33,8 +33,12 @@ eGFRsmooth can be installed from GitHub with:
 
 ``` r
 library("devtools")
-devtools::install_github("jleechung/eGFRsmooth")
+devtools::install_github("jleechung/eGFRsmooth", dependencies = TRUE)
 ```
+Dependencies:
+
+- [dplyr](https://dplyr.tidyverse.org/) (>= 1.0.0)
+- [tidyr](https://tidyr.tidyverse.org/) (>= 1.1.0)
 
 ## Quick Start
 
