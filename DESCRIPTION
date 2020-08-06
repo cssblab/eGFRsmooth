@@ -1,5 +1,5 @@
 Package: eGFRsmooth
-Title: Gaussian Kernel Smoothing of eGFR trajectories
+Title: Gaussian Kernel Smoothing of time-series eGFR data
 Version: 0.1.0
 Authors@R: c(
     person(given = "Joseph",
@@ -9,7 +9,7 @@ Authors@R: c(
     person(given = "Hyungwon",
            family = "Choi",
            role = c("aut")))
-Description: Gaussian Kernel Smoothing of eGFR trajectories 
+Description: Gaussian Kernel Smoothing of time-series eGFR data 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-## eGFRsmooth : Smoothing eGFR trajectories
+## eGFRsmooth : Smoothing time-series eGFR data
 
 eGFRsmooth is an R package designed to smooth time-series estimated
 Glomerular Filtration Rate (eGFR) data and generate trajectories. Data
